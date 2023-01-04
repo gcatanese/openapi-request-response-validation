@@ -12,7 +12,6 @@ public class OpenApiValidator {
         this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(schema).build();
     }
 
-
     public boolean validate(OpenApiValidatorObject validatorObject) {
         boolean ret = true;
 
