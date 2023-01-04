@@ -1,9 +1,4 @@
-package com.tweesky.cloudtools;
-
-import com.atlassian.oai.validator.OpenApiInteractionValidator;
-import com.atlassian.oai.validator.model.SimpleRequest;
-import com.atlassian.oai.validator.model.SimpleResponse;
-import com.atlassian.oai.validator.report.LevelResolver;
+package com.tweesky.cloudtools.validator;
 
 public class OpenApiValidatorObject {
 

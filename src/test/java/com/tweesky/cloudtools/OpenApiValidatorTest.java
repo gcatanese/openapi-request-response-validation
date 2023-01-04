@@ -1,5 +1,8 @@
 package com.tweesky.cloudtools;
 
+import com.tweesky.cloudtools.util.SchemaUtil;
+import com.tweesky.cloudtools.validator.OpenApiValidator;
+import com.tweesky.cloudtools.validator.OpenApiValidatorObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -16,18 +19,15 @@ public class OpenApiValidatorTest {
         String path = "/companies/{{companyId}}/webhooks";
         String response = "src/test/resources/json/mgmt-api-response.json";
 
-        OpenApiValidator validator = new OpenApiValidator(getContent(schema));
+        OpenApiValidator validator = new OpenApiValidator(SchemaUtil.getContent(schema));
 
         validator.validate(OpenApiValidatorObject.forMethod("GET")
                 .withPath(path)
-                .withResponseBody(getContent(response))
+                .withResponseBody(SchemaUtil.getContent(response))
                 .withResponseContentType("application/json")
                 .withStatus(200)
         );
 
     }
 
-    private String getContent(String filepath) throws IOException {
-        return new String(Files.readAllBytes(Path.of(filepath)), StandardCharsets.UTF_8);
-    }
 }
