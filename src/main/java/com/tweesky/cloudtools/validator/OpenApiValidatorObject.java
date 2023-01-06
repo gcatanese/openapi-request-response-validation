@@ -37,8 +37,8 @@ public class OpenApiValidatorObject {
         return this;
     }
 
-    public OpenApiValidatorObject withResponseBody(String requestBody) {
-        this.requestBody = requestBody;
+    public OpenApiValidatorObject withResponseBody(String responseBody) {
+        this.responseBody = responseBody;
         return this;
     }
 
