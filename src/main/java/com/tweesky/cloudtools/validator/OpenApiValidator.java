@@ -33,6 +33,13 @@ public class OpenApiValidator {
         if(validatorObject.getRequestBody() != null) {
             requestBuilder.withBody(validatorObject.getRequestBody());
         }
+        if(validatorObject.getHeaders() != null) {
+            for(var header : validatorObject.getHeaders()) {
+                String key = header.get("key");
+                String value = header.get("value");
+                requestBuilder.withHeader(key, value);
+            }
+        }
 
         SimpleResponse.Builder responseBuilder = SimpleResponse.Builder.status(validatorObject.getStatus());
         if(validatorObject.getResponseBody() != null) {

@@ -1,9 +1,14 @@
 package com.tweesky.cloudtools.validator;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 public class OpenApiValidatorObject {
 
     private String method;
     private String path;
+    private List<LinkedHashMap<String, String>> headers;
     private String requestBody;
     private String responseBody;
     private int status;
@@ -19,6 +24,11 @@ public class OpenApiValidatorObject {
 
     public OpenApiValidatorObject withPath(String path) {
         this.path = path;
+        return this;
+    }
+
+    public OpenApiValidatorObject withHeaders(List<LinkedHashMap<String, String>> headers) {
+        this.headers = headers;
         return this;
     }
 
@@ -56,6 +66,14 @@ public class OpenApiValidatorObject {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public List<LinkedHashMap<String, String>> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(List<LinkedHashMap<String, String>> headers) {
+        this.headers = headers;
     }
 
     public String getRequestBody() {

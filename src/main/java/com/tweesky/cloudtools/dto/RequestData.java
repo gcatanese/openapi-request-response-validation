@@ -1,9 +1,13 @@
 package com.tweesky.cloudtools.dto;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+
 public class RequestData {
 
     private String method;
     private String path;
+    private List<LinkedHashMap<String, String>> headers;
     private String requestAsJson;
     private String responseAsJson;
     private Integer statusCode;
@@ -22,6 +26,14 @@ public class RequestData {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public List<LinkedHashMap<String, String>> getHeaders() {
+        return headers;
+    }
+
+    public void setHeader(List<LinkedHashMap<String, String>> headers) {
+        this.headers = headers;
     }
 
     public String getRequestAsJson() {

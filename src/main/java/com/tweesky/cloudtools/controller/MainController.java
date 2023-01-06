@@ -35,6 +35,7 @@ public class MainController {
 
         var responseData = validator.validate(OpenApiValidatorObject.forMethod(request.getMethod())
                 .withPath(request.getPath())
+                .withHeaders(request.getHeaders())
                 .withRequestBody(request.getRequestAsJson())
                 .withResponseBody(request.getResponseAsJson())
                 .withResponseContentType("application/json")
