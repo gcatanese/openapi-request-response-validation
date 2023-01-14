@@ -10,6 +10,7 @@ public class SchemaUtil {
 
     /**
      * Get schema content from file
+     *
      * @param filepath
      * @return
      * @throws IOException
@@ -20,5 +21,5 @@ public class SchemaUtil {
 
     public static String getContent(InputStream inputStream) throws IOException {
         return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
+    }
 }
