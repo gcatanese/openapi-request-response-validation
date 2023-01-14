@@ -151,7 +151,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "email", "emailVerified", "firstName", "id", "lastName" ],
+        "required" : [ "firstName", "id", "lastName" ],
         "title" : "User",
         "type" : "object",
         "x-examples" : {
