@@ -1,14 +1,11 @@
 package com.tweesky.cloudtools;
 
-import com.tweesky.cloudtools.util.SchemaUtil;
+import com.tweesky.cloudtools.schema.SchemaUtil;
 import com.tweesky.cloudtools.validator.OpenApiValidator;
 import com.tweesky.cloudtools.validator.OpenApiValidatorObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class OpenApiValidatorTest {
 
