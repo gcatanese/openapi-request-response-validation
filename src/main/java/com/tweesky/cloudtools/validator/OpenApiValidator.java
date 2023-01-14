@@ -76,39 +76,4 @@ public class OpenApiValidator {
         return responseData;
     }
 
-    public static class Builder {
-
-        private String method;
-        private String path;
-        private String requestBody;
-        private String responseBody;
-
-
-        Builder(String method) {
-            this.method = method;
-        }
-
-        public static Builder forMethod(String method) {
-            return new Builder(method);
-        }
-
-        public Builder withPath(String path) {
-            this.path = path;
-            return this;
-        }
-
-        public void withRequestBody(String requestBody) {
-            this.requestBody = requestBody;
-        }
-
-        public void withResponseBody(String responseBody) {
-            this.path = responseBody;
-        }
-    }
-
-    String getContent(String filepath) throws IOException {
-        return new String(Files.readAllBytes(Path.of(filepath)), StandardCharsets.UTF_8);
-    }
-
-
 }
