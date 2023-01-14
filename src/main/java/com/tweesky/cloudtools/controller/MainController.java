@@ -1,25 +1,21 @@
 package com.tweesky.cloudtools.controller;
 
 import com.tweesky.cloudtools.dto.RequestData;
-import com.tweesky.cloudtools.dto.ResponseData;
-import com.tweesky.cloudtools.util.SchemaUtil;
+import com.tweesky.cloudtools.schema.SchemaMap;
 import com.tweesky.cloudtools.validator.OpenApiValidator;
 import com.tweesky.cloudtools.validator.OpenApiValidatorObject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 @RestController
 @RequestMapping
 public class MainController {
-
-    String schema = "src/test/resources/schema/ManagementService-v1.json";
 
     private final Logger log = LoggerFactory.getLogger(MainController.class);
 
@@ -29,9 +25,11 @@ public class MainController {
     }
 
     @PostMapping(value = "/validate")
-    ResponseEntity<?> post(@RequestBody RequestData request) throws URISyntaxException, IOException {
+    ResponseEntity<?> post(@RequestBody Map<String, Object> req) {
+        RequestData request = new RequestData(req);
+        log.info("/validate collectionId:" + request.getCollectionId());
 
-        OpenApiValidator validator = new OpenApiValidator(SchemaUtil.getContent(schema));
+        OpenApiValidator validator = new OpenApiValidator(SchemaMap.get(request.getCollectionId()));
 
         var responseData = validator.validate(OpenApiValidatorObject.forMethod(request.getMethod())
                 .withPath(request.getPath())

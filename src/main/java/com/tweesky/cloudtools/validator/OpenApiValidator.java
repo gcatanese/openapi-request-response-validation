@@ -1,6 +1,7 @@
 package com.tweesky.cloudtools.validator;
 
 import com.atlassian.oai.validator.OpenApiInteractionValidator;
+import com.atlassian.oai.validator.model.Request;
 import com.atlassian.oai.validator.model.SimpleRequest;
 import com.atlassian.oai.validator.model.SimpleResponse;
 
@@ -19,17 +20,21 @@ public class OpenApiValidator {
 
     private final Logger log = LoggerFactory.getLogger(OpenApiValidator.class);
 
-
     private OpenApiInteractionValidator validator;
 
     public OpenApiValidator(String schema) {
+
+        if(schema == null) {
+            new RuntimeException("OpenAPI schema is undefined");
+        }
         this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(schema)
                 .build();
     }
 
     public ResponseData validate(OpenApiValidatorObject validatorObject) {
 
-        SimpleRequest.Builder requestBuilder = SimpleRequest.Builder.get(validatorObject.getPath());
+        SimpleRequest.Builder requestBuilder = new SimpleRequest.Builder
+                (Request.Method.valueOf(validatorObject.getMethod()), validatorObject.getPath());
         if(validatorObject.getRequestBody() != null) {
             requestBuilder.withBody(validatorObject.getRequestBody());
         }
