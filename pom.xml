@@ -58,7 +58,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <JUNIT_VERSION>5.8.2</JUNIT_VERSION>
+        <JUNIT_VERSION>5.9.2</JUNIT_VERSION>
     </properties>
 
 
