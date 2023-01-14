@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import static com.tweesky.cloudtools.OpenApiValidatorApplication.DEFAULT_SCHEMA_KEY;
+
 @RestController
 @RequestMapping
 public class MainController {
@@ -25,11 +27,12 @@ public class MainController {
     }
 
     @PostMapping(value = "/validate")
-    ResponseEntity<?> post(@RequestBody Map<String, Object> req) {
+    ResponseEntity<?> validate(@RequestBody Map<String, Object> req) {
         RequestData request = new RequestData(req);
-        log.info("/validate collectionId:" + request.getCollectionId());
 
-        OpenApiValidator validator = new OpenApiValidator(SchemaMap.get(request.getCollectionId()));
+        String key = request.getCollectionId().isEmpty() ? DEFAULT_SCHEMA_KEY : request.getCollectionId();
+
+        OpenApiValidator validator = new OpenApiValidator(SchemaMap.get(key));
 
         var responseData = validator.validate(OpenApiValidatorObject.forMethod(request.getMethod())
                 .withPath(request.getPath())

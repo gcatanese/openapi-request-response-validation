@@ -21,7 +21,7 @@ public class OpenApiValidator {
     public OpenApiValidator(String schema) {
 
         if(schema == null) {
-            new RuntimeException("OpenAPI schema is undefined");
+            throw new RuntimeException("OpenAPI schema is undefined");
         }
         this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(schema)
                 .build();
