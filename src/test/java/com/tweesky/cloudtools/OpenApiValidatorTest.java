@@ -3,7 +3,7 @@ package com.tweesky.cloudtools;
 import com.tweesky.cloudtools.schema.SchemaUtil;
 import com.tweesky.cloudtools.validator.OpenApiValidator;
 import com.tweesky.cloudtools.validator.OpenApiValidatorObject;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
 public class OpenApiValidatorTest {
 
     private final Logger log = LoggerFactory.getLogger(OpenApiValidatorTest.class);
-
 
     @Test
     public void validate() throws IOException {
