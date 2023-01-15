@@ -4,6 +4,7 @@ import com.tweesky.cloudtools.schema.SchemaMap;
 import com.tweesky.cloudtools.schema.SchemaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,9 @@ import java.io.IOException;
 public class InitController {
 
     private final Logger log = LoggerFactory.getLogger(InitController.class);
+
+    @Autowired
+    private SchemaUtil schemaUtil;
 
     @PostMapping(value = "/init")
     ResponseEntity<?> init(@RequestParam String collectionId, @RequestBody String json) {
@@ -30,7 +34,7 @@ public class InitController {
         log.info("/init collectionId:" + collectionId);
 
         try {
-            SchemaMap.set(collectionId, SchemaUtil.getContent(file.getInputStream()));
+            SchemaMap.set(collectionId, schemaUtil.getContent(file.getInputStream()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
