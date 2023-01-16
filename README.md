@@ -1,14 +1,13 @@
-# openapi-request-response-validation
+# OpenAPI validator
 
 Validation of requests/responses according to the OpenAPI specs.
 
-This tool allows to make sure that requests and responses exchanged respect the
-OpenAPI specification of your API.
+This tool allows to verify that requests/responses are valid according to the OpenAPI specification of the API.
 
 ## How does it work?
 
 Use Postman to test your API and send `request`, `response` and `headers` to the validator. 
-The Test is marked with green when the API specification is respected.
+The Test is passed when the API specification is respected.
 
 diagram..
 
@@ -17,7 +16,8 @@ diagram..
 Steps:
 * add the snippet below in the Collection Tests
 * provide the OpenAPI file
-* run the `openapi-request-response-validation` tool  
+* launch the `openapi-request-response-validation` tool ([Java app](#start-the-tool-java) or using [Docker](#start-the-tool-docker)) 
+* run the Postman requests against your service or application 
 
 ### Collection Test snippet
 
@@ -89,73 +89,16 @@ You can run the tool on Docker
 
 ```
 
+# run using default openapi/openapi.yaml or openapi/openapi.json
 docker run -v $(pwd):/openapi -e  -it --rm --name test test
 
+# run using custom location of the OpenAPI file
 docker run -v $(pwd):/tmp -e INPUT_SPECS=/tmp/openapi.yaml -it --rm --name test test
 
 ```
 
-String uri = "";
+### Run Postman requests
 
-HttpClient client = HttpClient.newBuilder().build();
-HttpRequest request = HttpRequest.newBuilder()
-.uri(URI.create(uri))
-.POST(BodyPublishers.ofString(data))
-.build();
+Run the Postman requests and check the Test tab
 
-    HttpResponse<?> response = client.send(request, BodyHandlers.discarding());
-    System.out.println(response.statusCode());
-
-
-
-bck
-
-openapiRequestResponseValidation = {
-validate: function(pm) {
-
-        const postRequest = {
-            url: 'http://localhost:8080/validate',
-            method: 'POST',
-            header: {'Content-Type': 'application/json'},
-            body: {
-            mode: 'raw',
-            raw: JSON.stringify({ 
-                method: pm.request.method, 
-                path: pm.request.url.getPath(),
-                headers: pm.request.headers,
-                requestAsJson: (pm.request.body != "") ? pm.request.body.raw : null,
-                responseAsJson: pm.response.text(),
-                statusCode: pm.response.code
-                })
-            }
-        };
-
-
-        pm.sendRequest(postRequest, (error, response) => {
-            if(error != undefined) {
-                pm.environment.unset("openapiRequestResponseIsValid");
-            } else {
-                var data = response.json();
-
-                pm.environment.set("openapiRequestResponseIsValid", data.valid);
-
-                if(data.valid == false) {
-                    console.log(data.errors);
-                }
-
-                pm.test("OpenAPI validation", () => {
-    pm.expect(pm.environment.get("openapiRequestResponseIsValid"), "Invalid request/response (check Console)").to.equal(true);
-});
-
-            }
-        });  
-    }
-
-};
-
-openapiRequestResponseValidation.validate(pm);
-
-// pm.test("OpenAPI validation", () => {
-//     pm.expect(pm.environment.get("openapiRequestResponseIsValid"), "Invalid request/response (check Console)").to.equal(true);
-// });
-
+![Postman Test Results](doc/postman-test-results.png)
