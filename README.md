@@ -9,7 +9,8 @@ This tool allows to verify that requests/responses are valid according to the Op
 Use Postman to test your API and send `request`, `response` and `headers` to the validator. 
 The Test is passed when the API specification is respected.
 
-diagram..
+![OpenAPI Validator](doc/openapi-validator.png)
+
 
 ## How to run
 
