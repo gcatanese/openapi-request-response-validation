@@ -102,3 +102,10 @@ docker run -v $(pwd):/tmp -e INPUT_SPECS=/tmp/openapi.yaml -it --rm --name test 
 Run the Postman requests and check the Test tab
 
 ![Postman Test Results](doc/postman-test-results.png)
+
+
+
+---
+Using [Atlassian Swagger Validator](https://bitbucket.org/atlassian/swagger-request-validator/), [Postman](https://postman.com) 
+and [Docker](https://docker.com)
+
