@@ -24,7 +24,7 @@ Steps:
 
 In the **Collection Tests** add the snippet below. It will run after every request in the collection.  
 
-What does it do? After executing the request the Test Script will send `request`, `response` and `headers` to validator.
+What does it do? After executing the request the Test Script will send `request`, `response` and `headers` to the validator.
 
 ```
 openapiRequestResponseValidation = {
