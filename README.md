@@ -91,13 +91,14 @@ Alternatively if needed you can customise the location of the OpenAPI file
 You can run the tool on Docker
 
 ```
-
 # run using default openapi/openapi.yaml or openapi/openapi.json
-docker run -v $(pwd):/openapi -e  -it --rm --name test test
+docker run -v $(pwd):/openapi -it --rm --name openapi-request-response-validation
+ gcatanese/openapi-request-response-validation
 
 # run using custom location of the OpenAPI file
-docker run -v $(pwd):/tmp -e INPUT_SPECS=/tmp/openapi.yaml -it --rm --name test test
-
+docker run -v $(pwd):/openapi -e INPUT_SPECS=/tmp/openapi.yaml 
+  -it --rm --name openapi-request-response-validation
+    gcatanese/openapi-request-response-validation
 ```
 
 ### Run Postman requests
