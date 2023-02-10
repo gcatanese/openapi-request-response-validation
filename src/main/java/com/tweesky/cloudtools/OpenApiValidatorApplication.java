@@ -1,5 +1,6 @@
 package com.tweesky.cloudtools;
 
+import com.tweesky.cloudtools.config.ApplicationProperty;
 import com.tweesky.cloudtools.schema.SchemaMap;
 import com.tweesky.cloudtools.schema.SchemaUtil;
 import org.slf4j.Logger;
@@ -19,6 +20,9 @@ public class OpenApiValidatorApplication {
     @Autowired
     private SchemaUtil schemaUtil;
 
+    @Autowired
+    private ApplicationProperty applicationProperty;
+
     public static void main(String[] args) {
         SpringApplication.run(OpenApiValidatorApplication.class, args);
     }
@@ -30,6 +34,6 @@ public class OpenApiValidatorApplication {
         if(defaultSchema != null) {
             SchemaMap.set(DEFAULT_SCHEMA_KEY, defaultSchema);
         }
-        log.info("Running on http://localhost:8080");
+        log.info("Running on http://localhost:" + applicationProperty.getPort() );
     }
 }
