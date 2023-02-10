@@ -76,14 +76,14 @@ Copy/rename your OpenAPI specs to `openapi/openapi.yaml` or `openapi/openapi.jso
 
 ### Start the tool (Java)
 
-Start the Springboot application 
+Run the Java application 
 ```shell
-    mvn spring-boot:run"
+    java -jar target/openapi-request-response-validator.jar
 ```
 
-Alternatively if needed you can customise the location of the OpenAPI file
+Run the Java application with custom port and spec file
 ```shell
-    mvn spring-boot:run -Dspring-boot.run.arguments="--inputSpecs=/path/to/myopenapi.yaml"
+    java -jar target/openapi-request-response-validator.jar --server.port=8888 --INPUT_SPECS=/path/to/myopenapi.yaml
 ```
 
 ### Start the tool (Docker)
