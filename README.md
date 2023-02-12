@@ -78,12 +78,12 @@ Copy/rename your OpenAPI specs to `openapi/openapi.yaml` or `openapi/openapi.jso
 
 Run the Java application 
 ```shell
-    java -jar target/openapi-request-response-validator.jar
+java -jar target/openapi-request-response-validator.jar
 ```
 
 Run the Java application with custom port and spec file
 ```shell
-    java -jar target/openapi-request-response-validator.jar --server.port=8888 --INPUT_SPECS=/path/to/myopenapi.yaml
+java -jar target/openapi-request-response-validator.jar --server.port=8888 --INPUT_SPECS=/path/to/myopenapi.yaml
 ```
 
 ### Start the tool (Docker)
