@@ -4,6 +4,8 @@ Validation of requests/responses according to the OpenAPI specs.
 
 This tool allows to verify that requests/responses are valid according to the OpenAPI specification of the API.
 
+More on [Validating API requests and responses](https://medium.com/geekculture/validating-api-requests-and-responses-25ed5cc9e846)
+
 ## How does it work?
 
 Use Postman to test/work with your API and use [Test Scripts](https://learning.postman.com/docs/writing-scripts/test-scripts/) to send `request`, `response` and `headers` to the validator. 
