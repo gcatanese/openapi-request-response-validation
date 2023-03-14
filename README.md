@@ -31,6 +31,15 @@ What does it do? After executing the request the Test Script will send `request`
 ```
 openapiRequestResponseValidation = {
     validate: function(pm) {
+    
+        // build path without baseUrl
+        var baseUrl = pm.collectionVariables.get("baseUrl");
+        baseUrl = baseUrl.replace('https://','');
+        baseUrl = baseUrl.replace(pm.request.url.getHost(),'');
+
+        var path = pm.request.url.getPath().replace(baseUrl,'');
+
+        console.log('Validation for ' + path);
 
         const postRequest = {
             url: 'http://localhost:8080/validate',
@@ -40,7 +49,7 @@ openapiRequestResponseValidation = {
             mode: 'raw',
             raw: JSON.stringify({ 
                 method: pm.request.method, 
-                path: pm.request.url.getPath(),
+                path: path,
                 headers: pm.request.headers,
                 requestAsJson: (pm.request.body != "") ? pm.request.body.raw : null,
                 responseAsJson: pm.response.text(),
