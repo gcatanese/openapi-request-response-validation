@@ -1,8 +1,10 @@
 # OpenAPI validator
 
-Validation of requests/responses according to the OpenAPI specs.
+This tool allows the validation at runtime of the API requests responses according to the OpenAPI specs.  
 
-This tool allows to verify that requests/responses are valid according to the OpenAPI specification of the API.
+There are several tools that can validate an OpenAPI specification, but there are no many options to ensure that the API contracts are honoured by the API we are developing.
+
+This tool make sure that the API requests and responses are valid according to the OpenAPI specification of the API.
 
 More on [Validating API requests and responses](https://medium.com/geekculture/validating-api-requests-and-responses-25ed5cc9e846)
 
