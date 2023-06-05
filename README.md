@@ -8,7 +8,7 @@ This tool make sure that the API requests and responses are valid according to t
 
 More on [Validating API requests and responses](https://medium.com/geekculture/validating-api-requests-and-responses-25ed5cc9e846)
 
-The `openapi-request-response-validator` is a SpringBoot application with a REST controller to allow Postman scripts (or other clients) to send the payload to validate. The OpenAPI file can be supplied at startup.
+The `openapi-request-response-validator` is a SpringBoot (Java) application implementing a REST controller to allow Postman scripts (or other clients) to send the payload to be validated. The OpenAPI file can be supplied at startup.
 
 ## How does it work?
 
