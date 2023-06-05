@@ -10,8 +10,8 @@ More on [Validating API requests and responses](https://medium.com/geekculture/v
 
 ## How does it work?
 
-Use Postman to test/work with your API and use [Test Scripts](https://learning.postman.com/docs/writing-scripts/test-scripts/) to send `request`, `response` and `headers` to the validator. 
-The Test is passed when the API specification is respected.
+You work with Postman to test the API endpoints, sending a request and verify the response. Thanks to Postman [Test Scripts](https://learning.postman.com/docs/writing-scripts/test-scripts/) it is possible to add custom scripts to access the  `request`, `response` and `headers` programmatically and send them to the OpenAPI Request-Response Validator.
+Postman tests (with assertions) can be defined to confirm the JSON payloads are valid according to the API specification.
 
 ![OpenAPI Validator](doc/openapi-validator.png)
 
