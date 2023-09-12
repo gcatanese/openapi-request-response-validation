@@ -18,7 +18,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v3
       with:
         platforms: all
     - name: Set up Docker Buildx
