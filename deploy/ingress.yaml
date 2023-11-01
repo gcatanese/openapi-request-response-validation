@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ob-openapi-request-response-validator-ingress
+  namespace: open-banking-dev
+spec:
+  rules:
+  - host: validator.dev.mk.open-bank.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ob-openapi-request-response-validator-service
+            port:
+              number: 8080

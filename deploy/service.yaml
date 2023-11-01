@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ob-openapi-request-response-validator
+  namespace: open-banking-dev
+spec:
+  selector:
+    matchLabels:
+      app: ob-openapi-request-response-validator
+  template:
+    metadata:
+      labels:
+        app: ob-openapi-request-response-validator
+    spec:
+      containers:
+      - name: ob-openapi-request-response-validator
+        image: registry.see.asseco.com/open-banking/ob-openapi-request-response-validation:latest
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always # Set to Always to force a pull
+      imagePullSecrets:
+      - name: dev-authentication-image-pull
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ob-openapi-request-response-validator-service
+  namespace: open-banking-dev
+spec:
+  selector:
+    app: ob-openapi-request-response-validator
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
