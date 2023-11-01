@@ -130,3 +130,69 @@ Run the Postman requests and check the Test tab
 Using [Atlassian Swagger Validator](https://bitbucket.org/atlassian/swagger-request-validator/), [Postman](https://postman.com) 
 and [Docker](https://docker.com)
 
+
+---
+ASEE Deployment Kubernetest
+
+To deploy the application to a Kubernetes cluster, you should first build a Docker image and push it to the Harbor repository. Before building the Docker image from a Dockerfile, ensure that Docker is installed on your machine. You can download the latest version of Docker Desktop by following [this link](https://www.docker.com/products/docker-desktop/). Choose the appropriate setup for your machine and install it.
+
+
+After the installation is complete, you can check if Docker is successfully installed by executing the following command in the Command Prompt (Windows):
+
+
+```sh
+docker -version
+docker run hello-world
+```
+If everything is okay, you should see a message like 'Hello from Docker!'.
+
+Before building the Docker image, make sure the latest OpenAPI specification from the [ob-api-doc](https://github.com/assecomk/ob-api-doc) repository is up to date with the one located in the `/openapi/` folder. You can refer to the [ob-api-doc](https://github.com/assecomk/ob-api-doc) documentation for instructions on how to build the latest version of the documentation.
+
+**_NOTE:_** If you build a new version of the OpenAPI documentation, remember to copy the YAML file into the `/openapi/` folder in this repository.
+
+The next step is to build the Docker image. To do so, in the Command Prompt, navigate to the root folder of the repository and enter the following command:
+
+```sh
+docker build -t ob-openapi-request-response-validation .
+```
+Check if the image is built correctly.
+
+```sh
+docker images
+```
+You should be able to confirm that a new Docker image has been successfully built.
+
+The next step is to tag the image and push it to the Harbor registry. If the Harbor registry is not set up on your machine, you can easily add it by executing the following command:
+```sh
+docker login https://registry.see.asseco.com
+```
+
+Tag the Docker image using the following command.
+```sh
+docker tag ob-openapi-request-response-validation:latest registry.see.asseco.com/open-banking/ob-openapi-request-response-validation:latest
+```
+
+Finally, push the image.
+```sh
+docker push registry.see.asseco.com/open-banking/ob-openapi-request-response-validation:latest
+```
+
+Congratulations, you have successfully pushed the image to the Harbor registry.
+
+The next step is deploying to the Kubernetes cluster.
+
+**_NOTE:_** Since this tool is intended for development purposes, it should be kept within the 'dev' namespace in the cluster.
+
+To create the deployment and service, you can use the 'service.yaml' in the 'deploy' folder.
+
+```sh
+kubectl apply -f service.yaml
+```
+
+To be able to access the service from outside of the Kubernetes cluster, we need to deploy the Ingress.
+
+```sh
+kubectl apply -f ingress.yaml
+```
+
+That's all; you should be able to access the service by accessing the URL of the Ingress host.
