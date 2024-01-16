@@ -201,8 +201,6 @@ tags:
       resource. This object contains the detailed access rights, the current
       validity and a Consent-ID token.     
     x-displayName: Account Consent Service
-  - name: Account Information Service (AIS)_Account Information Service (AIS)
-    x-displayName: Account Information Service (AIS)
   - name: Payment Initiation Service (PIS)_Payment Initiation Service (PIS)
     description: |
       The component for Payment Initiation Service (PIS) offers the following
@@ -707,8 +705,68 @@ paths:
           * to see the list of available payment accounts or
           * to see the list of available payment accounts with balances.
       operationId: createConsent
+      x-codeSamples:
+        - lang: cURL All accounts
+          source: |
+            curl --location '(REPLACE BASEURL HERE)/v1/consents' \
+
+            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
+            --header 'PSU-IP-Address: 10.150.15.1' \
+            --data '{
+              "access": {
+                  "allPsd2": "allAccountsWithOwnerName"
+              },
+              "recurringIndicator": true,
+              "validUntil": "2024-04-13",
+              "frequencyPerDay": 30,
+              "combinedServiceIndicator": false
+            }'
+            --cert    (INSERT CERTIFICATE.crt HERE) \
+            --key     (INSERT CERTIFICATE.key HERE)
+        - lang: cURL Dedicated account
+          source: |
+            curl --location '(REPLACE BASEURL HERE)/v1/consents' \
+
+            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
+            --header 'PSU-IP-Address: 10.150.15.1' \
+            --data '{
+              "access": {
+                  "accounts": [
+                      {
+                          "bban": "(XXX)221570643700",
+                          "currency": "MKD"
+                      }
+                  ],
+                  "balances": [
+                      {
+                          "currency": "MKD",
+                          "bban": "(XXX)221570643700"
+                      }
+                  ],
+                  "transactions": [
+                      {
+                          "currency": "MKD",
+                          "bban": "(XXX)221570643700"
+                      }
+                  ],
+                  "additionalInformation": {
+                      "ownerName": [
+                          {
+                              "bban": "(XXX)221570643700",
+                              "currency": "MKD"
+                          }
+                      ]
+                  }
+              },
+              "recurringIndicator": true,
+              "validUntil": "2024-04-13",
+              "frequencyPerDay": 30,
+              "combinedServiceIndicator": false
+            }'
+            --cert    (INSERT CERTIFICATE.crt HERE) \
+            --key     (INSERT CERTIFICATE.key HERE)
       tags:
-        - Account Information Service (AIS)_Account Information Service (AIS)
+        - Account Information Service (AIS)_Account Consent Service
       security:
         - {}
         - BearerAuthOAuth: []
@@ -744,208 +802,6 @@ paths:
       responses:
         '201':
           $ref: '#/components/responses/CREATED_201_Consents'
-        '400':
-          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
-        '401':
-          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
-        '403':
-          $ref: '#/components/responses/FORBIDDEN_403_AIS'
-        '404':
-          $ref: '#/components/responses/NOT_FOUND_404_AIS'
-        '405':
-          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
-        '406':
-          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
-        '408':
-          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
-        '409':
-          $ref: '#/components/responses/CONFLICT_409_AIS'
-        '415':
-          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
-        '429':
-          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
-        '500':
-          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
-        '503':
-          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
-  /v1/consents/{consentId}:
-    get:
-      summary: Get consent request
-      description: >
-        Returns the content of an account information consent object. 
-
-        This is returning the data for the TPP especially in cases, where the
-        consent was directly managed between ASPSP and PSU e.g. in a redirect
-        SCA Approach.
-      operationId: getConsentInformation
-      x-codeSamples:
-        - lang: cURL
-          source: >
-            curl --location '(REPLACE BASEURL HERE)/v1/consents/(REPLACE
-            CONSENTID HERE)' \
-
-            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
-
-            --header 'PSU-IP-Address: 10.150.15.1' \
-
-            --cert    (INSERT CERTIFICATE.crt HERE) \
-
-            --key     (INSERT CERTIFICATE.key HERE)
-      tags:
-        - Account Information Service (AIS)_Account Consent Service
-      security:
-        - {}
-        - BearerAuthOAuth: []
-      parameters:
-        - $ref: '#/components/parameters/consentId_PATH'
-        - $ref: '#/components/parameters/X-Request-ID'
-        - $ref: '#/components/parameters/Digest'
-        - $ref: '#/components/parameters/Signature'
-        - $ref: '#/components/parameters/TPP-Signature-Certificate'
-        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
-        - $ref: '#/components/parameters/PSU-IP-Port'
-        - $ref: '#/components/parameters/PSU-Accept'
-        - $ref: '#/components/parameters/PSU-Accept-Charset'
-        - $ref: '#/components/parameters/PSU-Accept-Encoding'
-        - $ref: '#/components/parameters/PSU-Accept-Language'
-        - $ref: '#/components/parameters/PSU-User-Agent'
-        - $ref: '#/components/parameters/PSU-Http-Method'
-        - $ref: '#/components/parameters/PSU-Device-ID'
-        - $ref: '#/components/parameters/PSU-Geo-Location'
-      responses:
-        '200':
-          $ref: '#/components/responses/OK_200_ConsentInformation'
-        '400':
-          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
-        '401':
-          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
-        '403':
-          $ref: '#/components/responses/FORBIDDEN_403_AIS'
-        '404':
-          $ref: '#/components/responses/NOT_FOUND_404_AIS'
-        '405':
-          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
-        '406':
-          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
-        '408':
-          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
-        '409':
-          $ref: '#/components/responses/CONFLICT_409_AIS'
-        '415':
-          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
-        '429':
-          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
-        '500':
-          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
-        '503':
-          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
-    delete:
-      summary: Delete consent
-      description: The TPP can delete an account information consent object if needed.
-      operationId: deleteConsent
-      x-codeSamples:
-        - lang: cURL
-          source: >
-            curl --location --request DELETE '(REPLACE BASEURL
-            HERE)/v1/consents/(REPLACE CONSENTID HERE)' \
-
-            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
-
-            --header 'PSU-IP-Address: 10.150.15.1' \
-
-            --cert    (INSERT CERTIFICATE.crt HERE) \
-
-            --key     (INSERT CERTIFICATE.key HERE)
-      tags:
-        - Account Information Service (AIS)_Account Consent Service
-      security:
-        - {}
-        - BearerAuthOAuth: []
-      parameters:
-        - $ref: '#/components/parameters/consentId_PATH'
-        - $ref: '#/components/parameters/X-Request-ID'
-        - $ref: '#/components/parameters/Digest'
-        - $ref: '#/components/parameters/Signature'
-        - $ref: '#/components/parameters/TPP-Signature-Certificate'
-        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
-        - $ref: '#/components/parameters/PSU-IP-Port'
-        - $ref: '#/components/parameters/PSU-Accept'
-        - $ref: '#/components/parameters/PSU-Accept-Charset'
-        - $ref: '#/components/parameters/PSU-Accept-Encoding'
-        - $ref: '#/components/parameters/PSU-Accept-Language'
-        - $ref: '#/components/parameters/PSU-User-Agent'
-        - $ref: '#/components/parameters/PSU-Http-Method'
-        - $ref: '#/components/parameters/PSU-Device-ID'
-        - $ref: '#/components/parameters/PSU-Geo-Location'
-      responses:
-        '204':
-          $ref: '#/components/responses/NO_CONTENT_204_Consents'
-        '400':
-          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
-        '401':
-          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
-        '403':
-          $ref: '#/components/responses/FORBIDDEN_403_AIS'
-        '404':
-          $ref: '#/components/responses/NOT_FOUND_404_AIS'
-        '405':
-          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
-        '406':
-          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
-        '408':
-          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
-        '409':
-          $ref: '#/components/responses/CONFLICT_409_AIS'
-        '415':
-          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
-        '429':
-          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
-        '500':
-          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
-        '503':
-          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
-  /v1/consents/{consentId}/status:
-    get:
-      summary: Consent status request
-      description: Read the status of an account information consent resource.
-      operationId: getConsentStatus
-      x-codeSamples:
-        - lang: cURL
-          source: >
-            curl --location '(REPLACE BASEURL HERE)/v1/consents/(REPLACE
-            CONSENTID HERE)' \
-
-            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
-
-            --header 'PSU-IP-Address: 10.150.15.1' \
-
-            --cert    '(INSERT CERTIFICATE.crt HERE)' \
-
-            --key     '(INSERT CERTIFICATE.key HERE)'
-      tags:
-        - Account Information Service (AIS)_Account Consent Service
-      security:
-        - {}
-        - BearerAuthOAuth: []
-      parameters:
-        - $ref: '#/components/parameters/consentId_PATH'
-        - $ref: '#/components/parameters/X-Request-ID'
-        - $ref: '#/components/parameters/Digest'
-        - $ref: '#/components/parameters/Signature'
-        - $ref: '#/components/parameters/TPP-Signature-Certificate'
-        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
-        - $ref: '#/components/parameters/PSU-IP-Port'
-        - $ref: '#/components/parameters/PSU-Accept'
-        - $ref: '#/components/parameters/PSU-Accept-Charset'
-        - $ref: '#/components/parameters/PSU-Accept-Encoding'
-        - $ref: '#/components/parameters/PSU-Accept-Language'
-        - $ref: '#/components/parameters/PSU-User-Agent'
-        - $ref: '#/components/parameters/PSU-Http-Method'
-        - $ref: '#/components/parameters/PSU-Device-ID'
-        - $ref: '#/components/parameters/PSU-Geo-Location'
-      responses:
-        '200':
-          $ref: '#/components/responses/OK_200_ConsentStatus'
         '400':
           $ref: '#/components/responses/BAD_REQUEST_400_AIS'
         '401':
@@ -1137,76 +993,6 @@ paths:
         '503':
           $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
   /v1/consents/{consentId}/authorisations/{authorisationId}:
-    get:
-      summary: Read the SCA status of the consent authorisation
-      description: >
-        This method returns the SCA status of a consent initiation's
-        authorisation sub-resource.
-      operationId: getConsentScaStatus
-      x-codeSamples:
-        - lang: cURL
-          source: >
-            curl --location '(REPLACE BASEURL HERE)/v1/consents/(REPLACE
-            CONSENTID HERE)/authorisations/(REPLACE AUTHENTICATIONID HERE)' \
-
-            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
-
-            --header 'PSU-IP-Address: 10.150.15.1' \
-
-            --header 'Content-Type: application/json' \
-
-            --cert    '(INSERT CERTIFICATE.crt HERE)' \
-
-            --key     '(INSERT CERTIFICATE.key HERE)'
-      tags:
-        - Account Information Service (AIS)_Account Consent Service
-      security:
-        - {}
-        - BearerAuthOAuth: []
-      parameters:
-        - $ref: '#/components/parameters/consentId_PATH'
-        - $ref: '#/components/parameters/authorisationId'
-        - $ref: '#/components/parameters/X-Request-ID'
-        - $ref: '#/components/parameters/Digest'
-        - $ref: '#/components/parameters/Signature'
-        - $ref: '#/components/parameters/TPP-Signature-Certificate'
-        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
-        - $ref: '#/components/parameters/PSU-IP-Port'
-        - $ref: '#/components/parameters/PSU-Accept'
-        - $ref: '#/components/parameters/PSU-Accept-Charset'
-        - $ref: '#/components/parameters/PSU-Accept-Encoding'
-        - $ref: '#/components/parameters/PSU-Accept-Language'
-        - $ref: '#/components/parameters/PSU-User-Agent'
-        - $ref: '#/components/parameters/PSU-Http-Method'
-        - $ref: '#/components/parameters/PSU-Device-ID'
-        - $ref: '#/components/parameters/PSU-Geo-Location'
-      responses:
-        '200':
-          $ref: '#/components/responses/OK_200_ScaStatus'
-        '400':
-          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
-        '401':
-          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
-        '403':
-          $ref: '#/components/responses/FORBIDDEN_403_AIS'
-        '404':
-          $ref: '#/components/responses/NOT_FOUND_404_AIS'
-        '405':
-          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
-        '406':
-          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
-        '408':
-          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
-        '409':
-          $ref: '#/components/responses/CONFLICT_409_AIS'
-        '415':
-          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
-        '429':
-          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
-        '500':
-          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
-        '503':
-          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
     put:
       summary: Update PSU Data for consents
       description: >
@@ -1306,6 +1092,278 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OK_200_UpdateConsentPsuData'
+        '400':
+          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
+        '401':
+          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
+        '403':
+          $ref: '#/components/responses/FORBIDDEN_403_AIS'
+        '404':
+          $ref: '#/components/responses/NOT_FOUND_404_AIS'
+        '405':
+          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
+        '406':
+          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
+        '408':
+          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
+        '409':
+          $ref: '#/components/responses/CONFLICT_409_AIS'
+        '415':
+          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
+        '429':
+          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
+        '500':
+          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
+        '503':
+          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
+    get:
+      summary: Read the SCA status of the consent authorisation
+      description: >
+        This method returns the SCA status of a consent initiation's
+        authorisation sub-resource.
+      operationId: getConsentScaStatus
+      x-codeSamples:
+        - lang: cURL
+          source: >
+            curl --location '(REPLACE BASEURL HERE)/v1/consents/(REPLACE
+            CONSENTID HERE)/authorisations/(REPLACE AUTHENTICATIONID HERE)' \
+
+            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
+
+            --header 'PSU-IP-Address: 10.150.15.1' \
+
+            --header 'Content-Type: application/json' \
+
+            --cert    '(INSERT CERTIFICATE.crt HERE)' \
+
+            --key     '(INSERT CERTIFICATE.key HERE)'
+      tags:
+        - Account Information Service (AIS)_Account Consent Service
+      security:
+        - {}
+        - BearerAuthOAuth: []
+      parameters:
+        - $ref: '#/components/parameters/consentId_PATH'
+        - $ref: '#/components/parameters/authorisationId'
+        - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/Digest'
+        - $ref: '#/components/parameters/Signature'
+        - $ref: '#/components/parameters/TPP-Signature-Certificate'
+        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
+        - $ref: '#/components/parameters/PSU-IP-Port'
+        - $ref: '#/components/parameters/PSU-Accept'
+        - $ref: '#/components/parameters/PSU-Accept-Charset'
+        - $ref: '#/components/parameters/PSU-Accept-Encoding'
+        - $ref: '#/components/parameters/PSU-Accept-Language'
+        - $ref: '#/components/parameters/PSU-User-Agent'
+        - $ref: '#/components/parameters/PSU-Http-Method'
+        - $ref: '#/components/parameters/PSU-Device-ID'
+        - $ref: '#/components/parameters/PSU-Geo-Location'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK_200_ScaStatus'
+        '400':
+          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
+        '401':
+          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
+        '403':
+          $ref: '#/components/responses/FORBIDDEN_403_AIS'
+        '404':
+          $ref: '#/components/responses/NOT_FOUND_404_AIS'
+        '405':
+          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
+        '406':
+          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
+        '408':
+          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
+        '409':
+          $ref: '#/components/responses/CONFLICT_409_AIS'
+        '415':
+          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
+        '429':
+          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
+        '500':
+          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
+        '503':
+          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
+  /v1/consents/{consentId}/status:
+    get:
+      summary: Consent status request
+      description: Read the status of an account information consent resource.
+      operationId: getConsentStatus
+      x-codeSamples:
+        - lang: cURL
+          source: >
+            curl --location '(REPLACE BASEURL HERE)/v1/consents/(REPLACE
+            CONSENTID HERE)' \
+
+            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
+
+            --header 'PSU-IP-Address: 10.150.15.1' \
+
+            --cert    '(INSERT CERTIFICATE.crt HERE)' \
+
+            --key     '(INSERT CERTIFICATE.key HERE)'
+      tags:
+        - Account Information Service (AIS)_Account Consent Service
+      security:
+        - {}
+        - BearerAuthOAuth: []
+      parameters:
+        - $ref: '#/components/parameters/consentId_PATH'
+        - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/Digest'
+        - $ref: '#/components/parameters/Signature'
+        - $ref: '#/components/parameters/TPP-Signature-Certificate'
+        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
+        - $ref: '#/components/parameters/PSU-IP-Port'
+        - $ref: '#/components/parameters/PSU-Accept'
+        - $ref: '#/components/parameters/PSU-Accept-Charset'
+        - $ref: '#/components/parameters/PSU-Accept-Encoding'
+        - $ref: '#/components/parameters/PSU-Accept-Language'
+        - $ref: '#/components/parameters/PSU-User-Agent'
+        - $ref: '#/components/parameters/PSU-Http-Method'
+        - $ref: '#/components/parameters/PSU-Device-ID'
+        - $ref: '#/components/parameters/PSU-Geo-Location'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK_200_ConsentStatus'
+        '400':
+          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
+        '401':
+          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
+        '403':
+          $ref: '#/components/responses/FORBIDDEN_403_AIS'
+        '404':
+          $ref: '#/components/responses/NOT_FOUND_404_AIS'
+        '405':
+          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
+        '406':
+          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
+        '408':
+          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
+        '409':
+          $ref: '#/components/responses/CONFLICT_409_AIS'
+        '415':
+          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
+        '429':
+          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
+        '500':
+          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
+        '503':
+          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
+  /v1/consents/{consentId}:
+    get:
+      summary: Get consent request
+      description: >
+        Returns the content of an account information consent object. 
+
+        This is returning the data for the TPP especially in cases, where the
+        consent was directly managed between ASPSP and PSU e.g. in a redirect
+        SCA Approach.
+      operationId: getConsentInformation
+      x-codeSamples:
+        - lang: cURL
+          source: >
+            curl --location '(REPLACE BASEURL HERE)/v1/consents/(REPLACE
+            CONSENTID HERE)' \
+
+            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
+
+            --header 'PSU-IP-Address: 10.150.15.1' \
+
+            --cert    (INSERT CERTIFICATE.crt HERE) \
+
+            --key     (INSERT CERTIFICATE.key HERE)
+      tags:
+        - Account Information Service (AIS)_Account Consent Service
+      security:
+        - {}
+        - BearerAuthOAuth: []
+      parameters:
+        - $ref: '#/components/parameters/consentId_PATH'
+        - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/Digest'
+        - $ref: '#/components/parameters/Signature'
+        - $ref: '#/components/parameters/TPP-Signature-Certificate'
+        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
+        - $ref: '#/components/parameters/PSU-IP-Port'
+        - $ref: '#/components/parameters/PSU-Accept'
+        - $ref: '#/components/parameters/PSU-Accept-Charset'
+        - $ref: '#/components/parameters/PSU-Accept-Encoding'
+        - $ref: '#/components/parameters/PSU-Accept-Language'
+        - $ref: '#/components/parameters/PSU-User-Agent'
+        - $ref: '#/components/parameters/PSU-Http-Method'
+        - $ref: '#/components/parameters/PSU-Device-ID'
+        - $ref: '#/components/parameters/PSU-Geo-Location'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK_200_ConsentInformation'
+        '400':
+          $ref: '#/components/responses/BAD_REQUEST_400_AIS'
+        '401':
+          $ref: '#/components/responses/UNAUTHORIZED_401_AIS'
+        '403':
+          $ref: '#/components/responses/FORBIDDEN_403_AIS'
+        '404':
+          $ref: '#/components/responses/NOT_FOUND_404_AIS'
+        '405':
+          $ref: '#/components/responses/METHOD_NOT_ALLOWED_405_AIS'
+        '406':
+          $ref: '#/components/responses/NOT_ACCEPTABLE_406_AIS'
+        '408':
+          $ref: '#/components/responses/REQUEST_TIMEOUT_408_AIS'
+        '409':
+          $ref: '#/components/responses/CONFLICT_409_AIS'
+        '415':
+          $ref: '#/components/responses/UNSUPPORTED_MEDIA_TYPE_415_AIS'
+        '429':
+          $ref: '#/components/responses/TOO_MANY_REQUESTS_429_AIS'
+        '500':
+          $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
+        '503':
+          $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
+    delete:
+      summary: Delete consent
+      description: The TPP can delete an account information consent object if needed.
+      operationId: deleteConsent
+      x-codeSamples:
+        - lang: cURL
+          source: >
+            curl --location --request DELETE '(REPLACE BASEURL
+            HERE)/v1/consents/(REPLACE CONSENTID HERE)' \
+
+            --header 'X-Request-ID: 4fb90a0a-ccf9-45f5-b3bb-0a027ab11187' \
+
+            --header 'PSU-IP-Address: 10.150.15.1' \
+
+            --cert    (INSERT CERTIFICATE.crt HERE) \
+
+            --key     (INSERT CERTIFICATE.key HERE)
+      tags:
+        - Account Information Service (AIS)_Account Consent Service
+      security:
+        - {}
+        - BearerAuthOAuth: []
+      parameters:
+        - $ref: '#/components/parameters/consentId_PATH'
+        - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/Digest'
+        - $ref: '#/components/parameters/Signature'
+        - $ref: '#/components/parameters/TPP-Signature-Certificate'
+        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
+        - $ref: '#/components/parameters/PSU-IP-Port'
+        - $ref: '#/components/parameters/PSU-Accept'
+        - $ref: '#/components/parameters/PSU-Accept-Charset'
+        - $ref: '#/components/parameters/PSU-Accept-Encoding'
+        - $ref: '#/components/parameters/PSU-Accept-Language'
+        - $ref: '#/components/parameters/PSU-User-Agent'
+        - $ref: '#/components/parameters/PSU-Http-Method'
+        - $ref: '#/components/parameters/PSU-Device-ID'
+        - $ref: '#/components/parameters/PSU-Geo-Location'
+      responses:
+        '204':
+          $ref: '#/components/responses/NO_CONTENT_204_Consents'
         '400':
           $ref: '#/components/responses/BAD_REQUEST_400_AIS'
         '401':
@@ -2728,7 +2786,7 @@ paths:
           $ref: '#/components/responses/INTERNAL_SERVER_ERROR_500_AIS'
         '503':
           $ref: '#/components/responses/SERVICE_UNAVAILABLE_503_AIS'
-  /v1/confirmation-of-funds/{consentId}/authorisations/{authorisationId}:
+  /v1/consents/confirmation-of-funds/{consentId}/authorisations/{authorisationId}:
     put:
       summary: Update data on the authorisation resource
       description: >
@@ -6545,69 +6603,6 @@ components:
           $ref: '#/components/schemas/_linksConsents'
         psuMessage:
           $ref: '#/components/schemas/psuMessageText'
-    lastActionDate:
-      description: >
-        This date is containing the date of the last action on the consent
-        object
-
-        either through 
-
-
-        the XS2A interface or the PSU/ASPSP interface having an impact on the
-        status.
-      type: string
-      format: date
-      example: '2018-07-01'
-    _linksGetConsent:
-      description: |
-        A list of hyperlinks to be recognised by the TPP.
-
-
-        Links of type "account", depending on the nature of the
-        consent.
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/hrefType'
-      properties:
-        account:
-          $ref: '#/components/schemas/hrefType'
-    consentInformationResponse-200_json:
-      description: Body of the JSON response for a successfull get consent request.
-      type: object
-      required:
-        - access
-        - recurringIndicator
-        - validUntil
-        - frequencyPerDay
-        - lastActionDate
-        - consentStatus
-      properties:
-        access:
-          $ref: '#/components/schemas/accountAccess'
-        recurringIndicator:
-          $ref: '#/components/schemas/recurringIndicator'
-        validUntil:
-          $ref: '#/components/schemas/validUntil'
-        frequencyPerDay:
-          $ref: '#/components/schemas/frequencyPerDay'
-        lastActionDate:
-          $ref: '#/components/schemas/lastActionDate'
-        consentStatus:
-          $ref: '#/components/schemas/consentStatus'
-        _links:
-          $ref: '#/components/schemas/_linksGetConsent'
-    consentStatusResponse-200:
-      description: >-
-        Body of the JSON response for a successful get status request for a
-        consent.
-      type: object
-      required:
-        - consentStatus
-      properties:
-        consentStatus:
-          $ref: '#/components/schemas/consentStatus'
-        psuMessage:
-          $ref: '#/components/schemas/psuMessageText'
     authorisationId:
       description: Resource identification of the related SCA.
       type: string
@@ -7223,6 +7218,69 @@ components:
           $ref: '#/components/schemas/_linksAuthorisationConfirmation'
         psuMessage:
           $ref: '#/components/schemas/psuMessageText'
+    consentStatusResponse-200:
+      description: >-
+        Body of the JSON response for a successful get status request for a
+        consent.
+      type: object
+      required:
+        - consentStatus
+      properties:
+        consentStatus:
+          $ref: '#/components/schemas/consentStatus'
+        psuMessage:
+          $ref: '#/components/schemas/psuMessageText'
+    lastActionDate:
+      description: >
+        This date is containing the date of the last action on the consent
+        object
+
+        either through 
+
+
+        the XS2A interface or the PSU/ASPSP interface having an impact on the
+        status.
+      type: string
+      format: date
+      example: '2018-07-01'
+    _linksGetConsent:
+      description: |
+        A list of hyperlinks to be recognised by the TPP.
+
+
+        Links of type "account", depending on the nature of the
+        consent.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/hrefType'
+      properties:
+        account:
+          $ref: '#/components/schemas/hrefType'
+    consentInformationResponse-200_json:
+      description: Body of the JSON response for a successfull get consent request.
+      type: object
+      required:
+        - access
+        - recurringIndicator
+        - validUntil
+        - frequencyPerDay
+        - lastActionDate
+        - consentStatus
+      properties:
+        access:
+          $ref: '#/components/schemas/accountAccess'
+        recurringIndicator:
+          $ref: '#/components/schemas/recurringIndicator'
+        validUntil:
+          $ref: '#/components/schemas/validUntil'
+        frequencyPerDay:
+          $ref: '#/components/schemas/frequencyPerDay'
+        lastActionDate:
+          $ref: '#/components/schemas/lastActionDate'
+        consentStatus:
+          $ref: '#/components/schemas/consentStatus'
+        _links:
+          $ref: '#/components/schemas/_linksGetConsent'
     creditorAgentName:
       description: Creditor agent name.
       type: string
@@ -10403,53 +10461,6 @@ components:
             href: /v1/consents/ff12171e-695d-4715-9d7e-8071f6086f6e
           status:
             href: /v1/consents/ff12171e-695d-4715-9d7e-8071f6086f6e/status
-    consentsInformationResponseExample:
-      description: Consent request on all account consent.
-      value:
-        access:
-          allPsd2: allAccountsWithOwnerName
-        recurringIndicator: true
-        validUntil: '2023-12-15'
-        frequencyPerDay: 4
-        lastActionDate: '2024-01-15'
-        consentStatus: valid
-    consentsInformationResponseExampleDedicated:
-      description: Consent request on dedicated account consent.
-      value:
-        access:
-          accounts:
-            iban: (XXXX)(XXX)143364354232
-            bban: (XXX)143364354232
-            msisdn: 3562540500
-            currency: MKD
-          balances:
-            iban: (XXXX)(XXX)143364354232
-            bban: (XXX)143364354232
-            msisdn: 3562540500
-            currency: MKD
-          transactions:
-            iban: (XXXX)(XXX)143364354232
-            bban: (XXX)143364354232
-            msisdn: 3562540500
-            currency: MKD
-          additionalInformation:
-            ownerName:
-              iban: (XXXX)(XXX)143364354232
-              bban: (XXX)143364354232
-              msisdn: 3562540500
-              currency: MKD
-        recurringIndicator: true
-        validUntil: '2024-03-13'
-        frequencyPerDay: 4
-        lastActionDate: '2024-01-15'
-        consentStatus: valid
-    consentDeleteResponseExample:
-      description: Successful consent delete.
-      value: null
-    consentStatusResponseExample1:
-      description: Response for a consent status request.
-      value:
-        consentStatus: valid
     authorisationListExample:
       value:
         authorisationIds:
@@ -10494,6 +10505,53 @@ components:
           status:
             href: >-
               /v1/payments/domestic-transfer/65ccd26eb0904d8eb802b9ac3ca06fc4/status
+    consentStatusResponseExample1:
+      description: Response for a consent status request.
+      value:
+        consentStatus: valid
+    consentsInformationResponseExample:
+      description: Consent request on all account consent.
+      value:
+        access:
+          allPsd2: allAccountsWithOwnerName
+        recurringIndicator: true
+        validUntil: '2023-12-15'
+        frequencyPerDay: 4
+        lastActionDate: '2024-01-15'
+        consentStatus: valid
+    consentsInformationResponseExampleDedicated:
+      description: Consent request on dedicated account consent.
+      value:
+        access:
+          accounts:
+            iban: (XXXX)(XXX)143364354232
+            bban: (XXX)143364354232
+            msisdn: 3562540500
+            currency: MKD
+          balances:
+            iban: (XXXX)(XXX)143364354232
+            bban: (XXX)143364354232
+            msisdn: 3562540500
+            currency: MKD
+          transactions:
+            iban: (XXXX)(XXX)143364354232
+            bban: (XXX)143364354232
+            msisdn: 3562540500
+            currency: MKD
+          additionalInformation:
+            ownerName:
+              iban: (XXXX)(XXX)143364354232
+              bban: (XXX)143364354232
+              msisdn: 3562540500
+              currency: MKD
+        recurringIndicator: true
+        validUntil: '2024-03-13'
+        frequencyPerDay: 4
+        lastActionDate: '2024-01-15'
+        consentStatus: valid
+    consentDeleteResponseExample:
+      description: Successful consent delete.
+      value: null
     paymentInitiationPP30Body_payments_json:
       value:
         debtorName: Placeholder
@@ -10901,43 +10959,6 @@ components:
           examples:
             Response in case of the OAuth2 approach with an implicit generated authorisation resource:
               $ref: '#/components/examples/consentResponseExample2_OAuth2'
-    OK_200_ConsentInformation:
-      description: OK
-      headers:
-        X-Request-ID:
-          $ref: '#/components/headers/X-Request-ID'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/consentInformationResponse-200_json'
-          examples:
-            Example with all account consent:
-              $ref: '#/components/examples/consentsInformationResponseExample'
-            Example with dedicated account consent:
-              $ref: >-
-                #/components/examples/consentsInformationResponseExampleDedicated
-    NO_CONTENT_204_Consents:
-      description: No Content
-      headers:
-        X-Request-ID:
-          $ref: '#/components/headers/X-Request-ID'
-      content:
-        application/json:
-          examples:
-            Example:
-              $ref: '#/components/examples/consentDeleteResponseExample'
-    OK_200_ConsentStatus:
-      description: OK
-      headers:
-        X-Request-ID:
-          $ref: '#/components/headers/X-Request-ID'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/consentStatusResponse-200'
-          examples:
-            Example:
-              $ref: '#/components/examples/consentStatusResponseExample1'
     OK_200_Authorisations:
       description: OK
       headers:
@@ -10995,6 +11016,43 @@ components:
           examples:
             Authorisation confirmation:
               $ref: '#/components/examples/authorisationConfirmationResponseExample'
+    OK_200_ConsentStatus:
+      description: OK
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/consentStatusResponse-200'
+          examples:
+            Example:
+              $ref: '#/components/examples/consentStatusResponseExample1'
+    OK_200_ConsentInformation:
+      description: OK
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/consentInformationResponse-200_json'
+          examples:
+            Example with all account consent:
+              $ref: '#/components/examples/consentsInformationResponseExample'
+            Example with dedicated account consent:
+              $ref: >-
+                #/components/examples/consentsInformationResponseExampleDedicated
+    NO_CONTENT_204_Consents:
+      description: No Content
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          examples:
+            Example:
+              $ref: '#/components/examples/consentDeleteResponseExample'
     CREATED_201_PaymentInitiation:
       description: CREATED
       headers:
@@ -11529,7 +11587,6 @@ x-tagGroups:
     tags:
       - Account Information Service (AIS)_Account Information Service
       - Account Information Service (AIS)_Account Consent Service
-      - Account Information Service (AIS)_Account Information Service (AIS)
     description: >
 
       # Overview
