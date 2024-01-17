@@ -265,10 +265,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/withBalanceQuery'
         - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/consentId_HEADER_mandatory'
         - $ref: '#/components/parameters/Digest'
         - $ref: '#/components/parameters/Signature'
         - $ref: '#/components/parameters/TPP-Signature-Certificate'
-        - $ref: '#/components/parameters/consentId_HEADER_mandatory'
         - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
         - $ref: '#/components/parameters/PSU-IP-Port'
         - $ref: '#/components/parameters/PSU-Accept'
@@ -350,10 +350,10 @@ paths:
         - $ref: '#/components/parameters/accountId'
         - $ref: '#/components/parameters/withBalanceQuery'
         - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/consentId_HEADER_mandatory'
         - $ref: '#/components/parameters/Digest'
         - $ref: '#/components/parameters/Signature'
         - $ref: '#/components/parameters/TPP-Signature-Certificate'
-        - $ref: '#/components/parameters/consentId_HEADER_mandatory'
         - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
         - $ref: '#/components/parameters/PSU-IP-Port'
         - $ref: '#/components/parameters/PSU-Accept'
@@ -428,11 +428,11 @@ paths:
       parameters:
         - $ref: '#/components/parameters/accountId'
         - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/consentId_HEADER_mandatory'
         - $ref: '#/components/parameters/Digest'
         - $ref: '#/components/parameters/Signature'
         - $ref: '#/components/parameters/TPP-Signature-Certificate'
         - $ref: '#/components/parameters/consentId_HEADER_mandatory'
-        - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
         - $ref: '#/components/parameters/PSU-IP-Port'
         - $ref: '#/components/parameters/PSU-Accept'
         - $ref: '#/components/parameters/PSU-Accept-Charset'
@@ -510,10 +510,10 @@ paths:
         - $ref: '#/components/parameters/deltaList'
         - $ref: '#/components/parameters/withBalanceQuery'
         - $ref: '#/components/parameters/X-Request-ID'
+        - $ref: '#/components/parameters/consentId_HEADER_mandatory'
         - $ref: '#/components/parameters/Digest'
         - $ref: '#/components/parameters/Signature'
         - $ref: '#/components/parameters/TPP-Signature-Certificate'
-        - $ref: '#/components/parameters/consentId_HEADER_mandatory'
         - $ref: '#/components/parameters/PSU-IP-Address_conditionalForAis'
         - $ref: '#/components/parameters/PSU-IP-Port'
         - $ref: '#/components/parameters/PSU-Accept'
@@ -3298,6 +3298,15 @@ components:
       schema:
         type: string
         format: uuid
+    consentId_HEADER_mandatory:
+      name: Consent-ID
+      in: header
+      description: |
+        This then contains the consentId of the related AIS consent, which was
+        performed prior to this payment initiation.
+      required: true
+      schema:
+        $ref: '#/components/schemas/consentId'
     Digest:
       name: Digest
       in: header
@@ -3335,15 +3344,6 @@ components:
         type: string
         format: byte
       required: false
-    consentId_HEADER_mandatory:
-      name: Consent-ID
-      in: header
-      description: |
-        This then contains the consentId of the related AIS consent, which was
-        performed prior to this payment initiation.
-      required: true
-      schema:
-        $ref: '#/components/schemas/consentId'
     PSU-IP-Address_conditionalForAis:
       name: PSU-IP-Address
       in: header
@@ -9889,30 +9889,6 @@ components:
       properties:
         consentStatus:
           $ref: '#/components/schemas/consentStatus'
-    cardNumber:
-      description: >-
-        Card Number of the card issued by the PIISP. Should be delivered if
-        available.
-      type: string
-      maxLength: 35
-    cardExpiryDate:
-      description: |
-        Expiry date of the card issued by the PIISP.
-      type: string
-      format: date
-      example: '2024-07-01'
-    cardInformation:
-      description: >-
-        Card Number of the card issued by the PIISP. Should be delivered if
-        available.
-      type: string
-      maxLength: 35
-    registrationInformation:
-      description: >-
-        Addtional information about the registration process for the PSU, e. g.
-        a reference to the TPP / PSU contract.
-      type: string
-      maxLength: 140
     ConsentConfirmationOfFundsContentResponse:
       description: Body of the JSON response for a confirmation of funds content request.
       type: object
@@ -9922,14 +9898,6 @@ components:
       properties:
         account:
           $ref: '#/components/schemas/accountReference'
-        cardNumber:
-          $ref: '#/components/schemas/cardNumber'
-        cardExpiryDate:
-          $ref: '#/components/schemas/cardExpiryDate'
-        cardInformation:
-          $ref: '#/components/schemas/cardInformation'
-        registrationInformation:
-          $ref: '#/components/schemas/registrationInformation'
         consentStatus:
           $ref: '#/components/schemas/consentStatus'
   headers:
@@ -10088,7 +10056,7 @@ components:
       summary: Account list With Consent With Limited Access
       description: >-
         Response in case of an example, where the consent has been given for all
-        accounts with full access.
+        accounts without balance or transactions.
       value:
         accounts:
           - resourceId: 1350382300
@@ -10122,8 +10090,8 @@ components:
     accountListExampleForDedicatedAccountAccess:
       summary: Account list With Consent For Dedicated Account Access
       description: >-
-        Response in case of an example, where the consent has been given for all
-        accounts with full access.
+        Response in case of an example, where the consent has been given for a
+        dedicated account.
       value:
         accounts:
           - resourceId: 1350382300
