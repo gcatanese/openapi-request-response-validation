@@ -6,7 +6,7 @@ There are several tools that can validate an OpenAPI specification, but there ar
 
 This tool make sure that the API requests and responses are valid according to the OpenAPI specification of the API.
 
-More on [Validating API requests and responses](https://medium.com/geekculture/validating-api-requests-and-responses-25ed5cc9e846)
+More on [Validating API requests and responses](https://beppecatanese.hashnode.dev/validating-api-requests-and-responses)
 
 The `openapi-request-response-validator` is a SpringBoot (Java) application implementing a REST controller to allow Postman scripts (or other clients) to send the payload to be validated. The OpenAPI file can be supplied at startup.
 
